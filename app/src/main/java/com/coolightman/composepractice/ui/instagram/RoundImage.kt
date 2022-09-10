@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,13 +28,15 @@ fun RoundImage(
     modifier: Modifier = Modifier,
     storiesStatus: StoriesStatus = StoriesStatus.Viewed()
 ) {
+    val borderColor = MaterialTheme.colors.onSecondary
+    val firstBorderWidth = 0.2.dp
     val borderModifier: Modifier = when (storiesStatus) {
         is StoriesStatus.None -> {
             modifier
                 .aspectRatio(1f, matchHeightConstraintsFirst = true)
                 .border(
-                    width = 0.2.dp,
-                    color = Color.LightGray,
+                    width = firstBorderWidth,
+                    color = borderColor,
                     shape = CircleShape
                 )
                 .clip(CircleShape)
@@ -42,7 +45,7 @@ fun RoundImage(
             modifier
                 .aspectRatio(1f, matchHeightConstraintsFirst = true)
                 .border(
-                    width = 2.5.dp,
+                    width = 2.dp,
                     brush = Brush.linearGradient(
                         colors = listOf(
                             YellowInst,
@@ -56,8 +59,8 @@ fun RoundImage(
                 )
                 .padding(4.dp)
                 .border(
-                    width = 0.2.dp,
-                    color = Color.LightGray,
+                    width = firstBorderWidth,
+                    color = borderColor,
                     shape = CircleShape
                 )
                 .clip(CircleShape)
@@ -66,14 +69,14 @@ fun RoundImage(
             modifier
                 .aspectRatio(1f, matchHeightConstraintsFirst = true)
                 .border(
-                    width = 0.5.dp,
-                    color = Color.LightGray,
+                    width = 0.8.dp,
+                    color = borderColor,
                     shape = CircleShape
                 )
                 .padding(4.dp)
                 .border(
-                    width = 0.2.dp,
-                    color = Color.LightGray,
+                    width = firstBorderWidth,
+                    color = borderColor,
                     shape = CircleShape
                 )
                 .clip(CircleShape)
