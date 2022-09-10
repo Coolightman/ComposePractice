@@ -2,6 +2,8 @@ package com.coolightman.composepractice.ui.instagram
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.foundation.MutatePriority
+import androidx.compose.foundation.gestures.stopScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -105,7 +107,7 @@ fun ProfileScreen() {
                             if (position.y == pxYCoordinate) {
                                 tabViewBarInTop.value = true
                                 Log.d("ProfileScreen", "TabViewScroll:enable")
-                            } else  {
+                            } else if (tabViewBarInTop.value) {
                                 tabViewBarInTop.value = false
                                 Log.d("ProfileScreen", "TabViewScroll:disable")
                             }
