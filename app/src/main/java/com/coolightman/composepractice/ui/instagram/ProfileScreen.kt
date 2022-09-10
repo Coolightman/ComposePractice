@@ -23,7 +23,7 @@ fun ProfileScreen() {
         mutableStateOf(0)
     }
     val scaffoldState = rememberScaffoldState()
-    val scrollState = rememberScrollState()
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -33,6 +33,7 @@ fun ProfileScreen() {
             BottomBar()
         },
         content = { innerPadding ->
+            val scrollState = rememberScrollState()
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -106,7 +107,7 @@ fun ProfileScreen() {
                 ) {
                     selectedTabIndex = it
                 }
-                val topBarHeight = innerPadding.calculateTopPadding()
+                val topBarHeight = 48.dp
                 val bottomBarHeight = innerPadding.calculateBottomPadding()
                 val appHeight = LocalConfiguration.current.screenHeightDp.dp
                 val tabHeight = appHeight - topBarHeight - bottomBarHeight - tabViewBarHeight
