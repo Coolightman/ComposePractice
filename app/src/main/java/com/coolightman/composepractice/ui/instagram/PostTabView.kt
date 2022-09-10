@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 fun PostTabView(
     modifier: Modifier = Modifier,
     imageWithTexts: List<ImageWithText>,
-    onTabSelected: (selectedIndex: Int) -> Unit
+    onTabSelected: (selectedIndex: Int) -> Unit,
 ) {
     var selectedTabIndex by remember {
         mutableStateOf(0)

@@ -1,6 +1,7 @@
 package com.coolightman.composepractice.ui.instagram
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -9,7 +10,10 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,6 +27,10 @@ fun ProfileScreen() {
         mutableStateOf(0)
     }
     val scaffoldState = rememberScaffoldState()
+
+    val tabViewBarInTop = remember {
+        mutableStateOf(false)
+    }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -88,8 +96,20 @@ fun ProfileScreen() {
                 HighlightSection(highlights = list)
                 Spacer(modifier = Modifier.height(12.dp))
                 val tabViewBarHeight = 48.dp
+                val pxYCoordinate = LocalDensity.current.run { tabViewBarHeight.toPx() }
                 PostTabView(
-                    modifier = Modifier.height(tabViewBarHeight),
+                    modifier = Modifier
+                        .height(tabViewBarHeight)
+                        .onGloballyPositioned { coordinates ->
+                            val position = coordinates.positionInRoot()
+                            if (position.y == pxYCoordinate) {
+                                tabViewBarInTop.value = true
+                                Log.d("ProfileScreen", "TabViewScroll:enable")
+                            } else  {
+                                tabViewBarInTop.value = false
+                                Log.d("ProfileScreen", "TabViewScroll:disable")
+                            }
+                        },
                     imageWithTexts = listOf(
                         ImageWithText(
                             image = painterResource(id = R.drawable.ic_grid),
@@ -138,7 +158,10 @@ fun ProfileScreen() {
                             painterResource(id = R.drawable.rabbit),
                             painterResource(id = R.drawable.kermit),
                         )
-                    )
+                    ) {
+//                        enable scroll in LazyGridColumn when tabViewBar in top and disable else
+                        tabViewBarInTop.value
+                    }
                     1 -> Box(
                         modifier = Modifier
                             .height(tabHeight)
