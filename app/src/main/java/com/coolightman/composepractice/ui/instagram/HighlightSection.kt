@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -31,7 +32,7 @@ fun HighlightSection(
                 modifier = paddingModifier.width(70.dp)
             ) {
                 RoundImage(
-                    image = item.image,
+                    image = painterResource(id = item.image),
                     modifier = Modifier.size(70.dp),
                     storiesStatus = item.storiesStatus
                 )

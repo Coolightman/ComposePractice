@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -15,19 +16,24 @@ import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.coolightman.composepractice.R
 import com.coolightman.composepractice.util.getEmojiByUnicode
+import com.coolightman.composepractice.util.getHighlightsList
+import com.coolightman.composepractice.util.getPostList
+import com.coolightman.composepractice.util.getTabViewElements
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen() {
+
     var selectedTabIndex by remember {
         mutableStateOf(0)
     }
     val scaffoldState = rememberScaffoldState()
-
+    val scrollState = rememberScrollState()
     val tabViewBarInTop = remember {
         mutableStateOf(false)
     }
@@ -41,7 +47,6 @@ fun ProfileScreen() {
             BottomBar()
         },
         content = { innerPadding ->
-            val scrollState = rememberScrollState()
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -49,12 +54,13 @@ fun ProfileScreen() {
                     .padding(innerPadding)
                     .verticalScroll(scrollState)
             ) {
-
                 Spacer(modifier = Modifier.height(4.dp))
                 ProfileSection()
                 Spacer(modifier = Modifier.height(4.dp))
+
                 val description = "Almost Android programmer ${getEmojiByUnicode(0x1F60F)}\n" +
                         "Try Jetpack Compose! You won't be disappointed ${getEmojiByUnicode(0x1F601)}"
+
                 ProfileDescription(
                     displayName = "Alexey Drugak",
                     description = description,
@@ -65,38 +71,16 @@ fun ProfileScreen() {
                 Spacer(modifier = Modifier.height(12.dp))
                 ButtonSection()
                 Spacer(modifier = Modifier.height(20.dp))
-                val list = listOf(
-                    ImageWithText(
-                        image = painterResource(id = R.drawable.hyena),
-                        text = "Hyena Story will begin"
-                    ),
-                    ImageWithText(
-                        image = painterResource(id = R.drawable.rabbit),
-                        text = "Rabbit"
-                    ),
-                    ImageWithText(
-                        image = painterResource(id = R.drawable.kermit),
-                        text = "Kermit",
-                        storiesStatus = StoriesStatus.Active()
-                    ),
-                    ImageWithText(
-                        image = painterResource(id = R.drawable.hyena),
-                        text = "Hyena again",
-                        storiesStatus = StoriesStatus.Active()
-                    ),
-                    ImageWithText(
-                        image = painterResource(id = R.drawable.kermit),
-                        text = "Kermit again"
-                    ),
-                    ImageWithText(
-                        image = painterResource(id = R.drawable.rabbit),
-                        text = "One more"
-                    )
-                )
-                HighlightSection(highlights = list)
+
+                val highlightsList = getHighlightsList()
+
+                HighlightSection(highlights = highlightsList)
                 Spacer(modifier = Modifier.height(12.dp))
+
                 val tabViewBarHeight = 48.dp
                 val pxYCoordinate = LocalDensity.current.run { tabViewBarHeight.toPx() }
+                val tabViewElements = getTabViewElements()
+
                 PostTabView(
                     modifier = Modifier
                         .height(tabViewBarHeight)
@@ -110,79 +94,52 @@ fun ProfileScreen() {
                                 Log.d("ProfileScreen", "TabViewScroll:disable")
                             }
                         },
-                    imageWithTexts = listOf(
-                        ImageWithText(
-                            image = painterResource(id = R.drawable.ic_grid),
-                            text = "Posts"
-                        ),
-                        ImageWithText(
-                            image = painterResource(id = R.drawable.reels),
-                            text = "Reels"
-                        ),
-                        ImageWithText(
-                            image = painterResource(id = R.drawable.mention),
-                            text = "One more"
-                        )
-                    )
+                    imageWithTexts = tabViewElements
                 ) {
                     selectedTabIndex = it
                 }
+
                 val topBarHeight = 48.dp
                 val bottomBarHeight = innerPadding.calculateBottomPadding()
                 val appHeight = LocalConfiguration.current.screenHeightDp.dp
                 val tabHeight = appHeight - topBarHeight - bottomBarHeight - tabViewBarHeight
+                val postList = getPostList()
+
                 when (selectedTabIndex) {
                     0 -> PostTabSection(
                         modifier = Modifier
                             .height(tabHeight)
                             .fillMaxWidth(),
-                        posts = listOf(
-                            painterResource(id = R.drawable.hyena),
-                            painterResource(id = R.drawable.kermit),
-                            painterResource(id = R.drawable.rabbit),
-                            painterResource(id = R.drawable.rabbit),
-                            painterResource(id = R.drawable.hyena),
-                            painterResource(id = R.drawable.kermit),
-                            painterResource(id = R.drawable.hyena),
-                            painterResource(id = R.drawable.kermit),
-                            painterResource(id = R.drawable.rabbit),
-                            painterResource(id = R.drawable.kermit),
-                            painterResource(id = R.drawable.hyena),
-                            painterResource(id = R.drawable.kermit),
-                            painterResource(id = R.drawable.rabbit),
-                            painterResource(id = R.drawable.rabbit),
-                            painterResource(id = R.drawable.hyena),
-                            painterResource(id = R.drawable.kermit),
-                            painterResource(id = R.drawable.hyena),
-                            painterResource(id = R.drawable.kermit),
-                            painterResource(id = R.drawable.rabbit),
-                            painterResource(id = R.drawable.kermit),
-                        )
-                    ) {
-//                        enable scroll in LazyGridColumn when tabViewBar in top and disable else
-                        tabViewBarInTop.value
-                    }
+                        userScrollEnabled = tabViewBarInTop,
+                        posts = postList
+                    )
+
                     1 -> Box(
+                        contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .height(tabHeight)
                             .fillMaxWidth()
                     ) {
-
+                        Text(
+                            text = "Your reels is empty",
+                            textAlign = TextAlign.Center
+                        )
                     }
                     2 -> Box(
+                        contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .height(tabHeight)
                             .fillMaxWidth()
                     ) {
-
+                        Text(
+                            text = "Your mentions is empty",
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
-
             }
         }
     )
-
-
 }
 
 @Preview(

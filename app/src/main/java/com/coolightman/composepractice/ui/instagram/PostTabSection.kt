@@ -9,16 +9,18 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun PostTabSection(
-    posts: List<Painter>,
+    posts: List<Int>,
     modifier: Modifier = Modifier,
-    userScrollEnabled: () -> Boolean
+    userScrollEnabled: MutableState<Boolean>
 ) {
     val lazyGridState = rememberLazyGridState()
     LazyVerticalGrid(
@@ -27,11 +29,12 @@ fun PostTabSection(
         horizontalArrangement = Arrangement.spacedBy(1.dp),
         verticalArrangement = Arrangement.spacedBy(1.dp),
         modifier = modifier,
-        userScrollEnabled = userScrollEnabled()
+        userScrollEnabled = userScrollEnabled.value
     ) {
         items(posts.size) {
             Image(
-                painter = posts[it], contentDescription = null,
+                painter = painterResource(id = posts[it]),
+                contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .aspectRatio(1f)
