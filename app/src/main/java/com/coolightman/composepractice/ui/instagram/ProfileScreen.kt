@@ -1,6 +1,5 @@
 package com.coolightman.composepractice.ui.instagram
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,17 +14,15 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.coolightman.composepractice.R
+import com.coolightman.composepractice.ui.theme.ComposePracticeTheme
 import com.coolightman.composepractice.util.getEmojiByUnicode
 import com.coolightman.composepractice.util.getHighlightsList
 import com.coolightman.composepractice.util.getPostList
 import com.coolightman.composepractice.util.getTabViewElements
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen() {
 
@@ -72,14 +69,18 @@ fun ProfileScreen() {
                 ButtonSection()
                 Spacer(modifier = Modifier.height(20.dp))
 
-                val highlightsList = getHighlightsList()
+                val highlightsList by remember {
+                    mutableStateOf(getHighlightsList())
+                }
 
                 HighlightSection(highlights = highlightsList)
                 Spacer(modifier = Modifier.height(12.dp))
 
                 val tabViewBarHeight = 48.dp
                 val pxYCoordinate = LocalDensity.current.run { tabViewBarHeight.toPx() }
-                val tabViewElements = getTabViewElements()
+                val tabViewElements by remember {
+                    mutableStateOf(getTabViewElements())
+                }
 
                 PostTabView(
                     modifier = Modifier
@@ -103,7 +104,9 @@ fun ProfileScreen() {
                 val bottomBarHeight = innerPadding.calculateBottomPadding()
                 val appHeight = LocalConfiguration.current.screenHeightDp.dp
                 val tabHeight = appHeight - topBarHeight - bottomBarHeight - tabViewBarHeight
-                val postList = getPostList()
+                val postList by remember {
+                    mutableStateOf(getPostList())
+                }
 
                 when (selectedTabIndex) {
                     0 -> PostTabSection(
@@ -148,7 +151,9 @@ fun ProfileScreen() {
 )
 @Composable
 private fun PreviewOf() {
-    ProfileScreen()
+    ComposePracticeTheme {
+        ProfileScreen()
+    }
 }
 
 

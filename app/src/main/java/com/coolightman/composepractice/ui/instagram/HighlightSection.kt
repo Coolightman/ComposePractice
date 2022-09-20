@@ -2,7 +2,6 @@ package com.coolightman.composepractice.ui.instagram
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -10,8 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.coolightman.composepractice.util.getHighlightsList
 
 @Composable
 fun HighlightSection(
@@ -19,17 +20,15 @@ fun HighlightSection(
     highlights: List<ImageWithText>
 ) {
     LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier
-            .fillMaxWidth()
     ) {
         items(highlights.size) {
             val item = highlights[it]
-            val paddingModifier = if (it == highlights.size - 1) Modifier.padding(horizontal = 18.dp)
-            else Modifier.padding(start = 18.dp)
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = paddingModifier.width(70.dp)
+                modifier = Modifier.width(70.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 RoundImage(
                     image = painterResource(id = item.image),
@@ -46,4 +45,14 @@ fun HighlightSection(
             }
         }
     }
+}
+
+@Preview(
+    widthDp = 320,
+    showBackground = true
+)
+@Composable
+private fun PreviewOf() {
+    val highlightsList = getHighlightsList()
+    HighlightSection(highlights = highlightsList)
 }
